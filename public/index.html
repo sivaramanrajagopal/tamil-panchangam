@@ -1,93 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Tamil Panchangam Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Madurai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Hind Madurai', sans-serif;
-      background-color: #FFF9C4;
+    :root {
+      --primary-color: #1A237E;
+      --secondary-color: #FF9800;
+      --background-color: #FFF9C4;
+      --text-color: #333;
+      --input-border-color: #FF9800;
+      --input-background: white;
+    }
+    
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+    
+    body {
+      font-family: 'Hind Madurai', sans-serif;
+      background-color: var(--background-color);
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+    
     .container {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-}
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+      width: 100%;
+    }
+    
     .card {
-      background-color: #FFF59D;
-      border: 1px solid #FFD54F;
-      border-radius: 0;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       overflow: hidden;
     }
+    
     .card-header {
-    padding: 10px;
-  }
-  .card-title {
-    font-size: 18px;
-  }
-  .card-subtitle {
-    font-size: 22px;
-  }
-  .card-content {
-    padding: 10px;
-  }
+      background: linear-gradient(135deg, #1A237E, #3F51B5);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .card-title {
+      font-size: 16px;
+      color: #FFD700;
+      margin-bottom: 5px;
+    }
+    
+    .card-subtitle {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 10px;
+    }
+    
     .form-row {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .form-group {
-    width: 100%;
-    min-width: 100%;
-  }
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px;
+      background-color: var(--background-color);
+    }
+    
+    .form-group {
+      position: relative;
+      width: 100%;
+    }
+    
     label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       font-weight: bold;
-      color: #333;
+      color: var(--primary-color);
+      font-size: 16px;
     }
+    
     input, select {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px; /* Prevent auto-zoom on iOS */
-  }
-  button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-  }
-    button:hover {
-      background-color: #F57C00;
+      width: 100%;
+      padding: 12px;
+      border: 2px solid var(--input-border-color);
+      border-radius: 8px;
+      background-color: var(--input-background);
+      font-size: 16px;
+      transition: all 0.3s ease;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
-    button:disabled {
+    
+    /* Custom dropdown arrow */
+    .form-group::after {
+      content: '▼';
+      font-size: 12px;
+      position: absolute;
+      top: 50px;
+      right: 15px;
+      color: var(--input-border-color);
+      pointer-events: none;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(26, 35, 126, 0.2);
+    }
+    
+    #calculateBtn {
+      width: 100%;
+      padding: 15px;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+    
+    #calculateBtn:hover {
+      background-color: #F57C00;
+      transform: translateY(-2px);
+    }
+    
+    #calculateBtn:disabled {
       background-color: #FFB74D;
       cursor: not-allowed;
     }
+    
     .results {
-    padding: 10px;
-  }
-  table {
-    font-size: 14px; /* Smaller font for mobile */
-  }
+      background-color: #F0F4C3;
+      border-radius: 8px;
+      margin-top: 20px;
+      padding: 15px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+    
     th, td {
       padding: 8px;
-
+      border-bottom: 1px solid #e0e0e0;
     }
+    
     th {
       background-color: #FFF59D;
     }
+    
     tr:nth-child(even) {
       background-color: #FFFDE7;
     }
+    
     .footer {
       text-align: center;
       margin-top: 20px;
       color: #616161;
     }
+    
     .error-message {
       background-color: #FFEBEE;
       border: 1px solid #FFCDD2;
@@ -97,14 +180,32 @@
       margin-bottom: 15px;
       display: none;
     }
+    
     @media (max-width: 600px) {
-        .container {
-    padding: 5px;
-    width: 100%;
-    max-width: 100%;
-  }
+      .container {
+        padding: 10px;
+        max-width: 100%;
+      }
+      
+      .card-header {
+        padding: 15px;
+      }
+      
+      .card-subtitle {
+        font-size: 20px;
+      }
+      
+      input, select, #calculateBtn {
+        font-size: 16px;
+        padding: 10px;
+      }
+    
+      .form-group::after {
+        top: 45px;
+        right: 10px;
+      }
     }
-  </style>
+    </style>
 </head>
 <body>
   <div class="container">
